@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MomentHaber - Anlık Haberler, Anında Bilgi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Genel Stiller */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #e60000;
+            --secondary-color: #333;
+            --light-color: #f4f4f4;
+            --dark-color: #222;
+            --text-color: #333;
+            --border-color: #ddd;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .main-wrapper {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .content-area {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .left-sidebar, .right-sidebar {
+            width: 300px;
+            flex-shrink: 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #c40000;
+        }
+
+        /* Header - EN ÜSTTE */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .top-header {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 10px 0;
+        }
+
+        .top-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .site-identity {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+
+        .logo span {
+            color: white;
+        }
+
+        .date-time {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            color: white;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: var(--primary-color);
+        }
+
+        .search-box {
+            display: flex;
+        }
+
+        .search-box input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px 0 0 4px;
+        }
+
+        .search-box button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+
+        /* Contact Info - YENİ EKLENDİ */
+        .contact-info {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+        }
+
+        .contact-info a {
+            color: white;
+            transition: color 0.3s;
+        }
+
+        .contact-info a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Ana Navigasyon - EN ÜSTTE */
+        .main-nav {
+            background-color: var(--secondary-color);
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav-menu li {
+            position: relative;
+        }
+
+        .nav-menu a {
+            display: block;
+            padding: 15px 25px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+
+        .nav-menu a:hover {
+            background-color: var(--primary-color);
+        }
+
+        .nav-menu li:hover .sub-menu {
+            display: block;
+        }
+
+        .sub-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .sub-menu a {
+            color: var(--text-color);
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sub-menu a:hover {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Breaking News */
+        .breaking-news {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 0;
+            margin: 10px 0;
+        }
+
+        .breaking-news .container {
+            display: flex;
+            align-items: center;
+        }
+
+        .breaking-label {
+            background-color: #a00000;
+            padding: 4px 12px;
+            font-weight: 700;
+            margin-right: 15px;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+
+        .breaking-content {
+            overflow: hidden;
+            position: relative;
+            height: 22px;
+            flex: 1;
+        }
+
+        .breaking-text {
+            position: absolute;
+            white-space: nowrap;
+            animation: scrollText 25s linear infinite;
+            font-size: 14px;
+        }
+
+        @keyframes scrollText {
+            0% { left: 100%; }
+            100% { left: -100%; }
+        }
+
+        /* Sidebar Reklamları */
+        .sidebar-ad {
+            background-color: #f0f0f0;
+            border: 2px dashed #ccc;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #666;
+            border-radius: 8px;
+        }
+
+        .sidebar-ad.vertical {
+            width: 300px;
+            height: 600px;
+        }
+
+        .sidebar-ad.horizontal {
+            width: 300px;
+            height: 250px;
+            margin-top: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin: 0;
+        }
+
+        /* Featured News */
+        .featured-news {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary-color);
+            display: inline-block;
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .featured-item {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .featured-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .featured-img {
+            height: 200px;
+            background-color: #eee;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .featured-item:hover .featured-img img {
+            transform: scale(1.05);
+        }
+
+        .category-tag {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 4px;
+        }
+
+        .featured-content {
+            padding: 15px;
+        }
+
+        .featured-content h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .read-more {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 14px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        /* News Grid */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .news-item {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .news-img {
+            height: 160px;
+            background-color: #eee;
+        }
+
+        .news-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .news-content {
+            padding: 15px;
+        }
+
+        .news-content h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        /* Sidebar Widgets */
+        .sidebar-widget {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .widget-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .trending-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+            cursor: pointer;
+        }
+
+        .trending-list li:last-child {
+            border-bottom: none;
+        }
+
+        .trending-number {
+            background-color: var(--primary-color);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .trending-content h4 {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .category-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .category-list li:last-child {
+            border-bottom: none;
+        }
+
+        .category-list a {
+            display: flex;
+            justify-content: space-between;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .category-list a:hover {
+            color: var(--primary-color);
+        }
+
+        .category-count {
+            background-color: var(--light-color);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        /* Newsletter */
+        .newsletter {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .newsletter h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .newsletter p {
+            margin-bottom: 15px;
+            opacity: 0.8;
+            font-size: 14px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            max-width: 100%;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            font-size: 14px;
+        }
+
+        .newsletter-form button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0 15px;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Haber Detay Sayfası */
+        .haber-detay-container {
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+
+        .haber-detay-header {
+            margin-bottom: 20px;
+        }
+
+        .haber-detay-baslik {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .haber-detay-meta {
+            display: flex;
+            gap: 20px;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .haber-detay-resim {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .haber-detay-icerik {
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .haber-detay-icerik p {
+            margin-bottom: 15px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h4 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-about p {
+            margin-bottom: 15px;
+            opacity: 0.8;
+            font-size: 14px;
+        }
+
+        .footer-contact {
+            margin-bottom: 15px;
+        }
+
+        .footer-contact p {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .no-image {
+            background: linear-gradient(45deg, #e60000, #ff4444);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .main-wrapper {
+                flex-direction: column;
+            }
+            
+            .left-sidebar, .right-sidebar {
+                width: 100%;
+                order: 3;
+            }
+            
+            .sidebar-ad.vertical {
+                width: 100%;
+                height: 250px;
+            }
+            
+            .content-area {
+                order: 2;
+            }
+
+            .contact-info {
+                display: none;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .featured-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .news-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--secondary-color);
+            }
+            
+            .nav-menu.active {
+                display: flex;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .top-header .container {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .site-identity {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .header-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-info {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header - EN ÜSTTE -->
+    <header>
+        <!-- Üst Bar - Logo ve Araçlar -->
+        <div class="top-header">
+            <div class="container">
+                <div class="site-identity">
+                    <div class="logo">MOMENT<span>HABER</span></div>
+                    <div class="date-time">
+                        <span id="current-date"></span>
+                        <span id="current-time"></span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <!-- Contact Info - YENİ EKLENDİ -->
+                    <div class="contact-info">
+                        
+                           
+                    </div>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    <div class="search-box">
+                        <input type="text" placeholder="Haber ara...">
+                        <button><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ana Navigasyon - EN ÜSTTE -->
+        <nav class="main-nav">
+            <div class="container">
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-menu">
+                    <li><a href="#" onclick="showCategory('all')">ANA SAYFA</a></li>
+                    <li>
+                        <a href="#" onclick="showCategory('gundem')">GÜNDEM <i class="fas fa-chevron-down"></i></a>
+                        <ul class="sub-menu">
+                            <li><a href="#" onclick="showCategory('siyaset')">Siyaset</a></li>
+                            <li><a href="#" onclick="showCategory('ekonomi')">Ekonomi</a></li>
+                            <li><a href="#" onclick="showCategory('dunya')">Dünya</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#" onclick="showCategory('spor')">SPOR</a></li>
+                    <li><a href="#" onclick="showCategory('ekonomi')">EKONOMİ</a></li>
+                    <li><a href="#" onclick="showCategory('teknoloji')">TEKNOLOJİ</a></li>
+                    <li><a href="#" onclick="showCategory('saglik')">SAĞLIK</a></li>
+                    <li><a href="#" onclick="showCategory('magazin')">MAGAZİN</a></li>
+                    <li><a href="#" onclick="showCategory('video')">VIDEO</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Breaking News -->
+    <section class="breaking-news">
+        <div class="container">
+            <div class="breaking-label">SON DAKİKA</div>
+            <div class="breaking-content">
+                <div class="breaking-text" id="breaking-text">Haberler yükleniyor...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ana İçerik -->
+    <div class="container">
+        <div class="main-wrapper">
+            <!-- Sol Sidebar - Reklamlar -->
+            <div class="left-sidebar">
+                <div class="sidebar-ad vertical">300x600 REKLAM</div>
+                <div class="sidebar-ad horizontal">300x250 REKLAM</div>
+            </div>
+
+            <!-- Ana İçerik Alanı -->
+            <div class="content-area">
+                <!-- Haber Detay Sayfası (Gizli) -->
+                <div id="haber-detay" class="haber-detay-container">
+                    <button onclick="anaSayfayaDon()" class="btn" style="margin-bottom: 20px;">
+                        <i class="fas fa-arrow-left"></i> Ana Sayfaya Dön
+                    </button>
+                    
+                    <div class="haber-detay-header">
+                        <h1 id="detay-baslik" class="haber-detay-baslik">Haber Başlığı</h1>
+                        <div id="detay-meta" class="haber-detay-meta">
+                            <span id="detay-kategori">Kategori</span>
+                            <span id="detay-zaman">Zaman</span>
+                            <span id="detay-goruntulenme">Görüntülenme</span>
+                        </div>
+                    </div>
+                    
+                    <img id="detay-resim" src="" alt="" class="haber-detay-resim">
+                    
+                    <div id="detay-icerik" class="haber-detay-icerik">
+                        Haber içeriği yükleniyor...
+                    </div>
+                </div>
+
+                <!-- Normal Haber Listesi -->
+                <div id="ana-icerik">
+                    <!-- Featured News -->
+                    <section class="featured-news">
+                        <h2 class="section-title">Öne Çıkan Haberler</h2>
+                        <div class="featured-grid" id="featured-news">
+                            <div class="loading">Haberler yükleniyor...</div>
+                        </div>
+                    </section>
+
+                    <!-- News Grid -->
+                    <section class="news-section">
+                        <h2 class="section-title">Son Haberler</h2>
+                        <div class="news-grid" id="news-grid">
+                            <div class="loading">Haberler yükleniyor...</div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Sağ Sidebar - Widgetlar ve Reklamlar -->
+            <div class="right-sidebar">
+                <!-- Trending News -->
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">Trend Haberler</h3>
+                    <ul class="trending-list" id="trending-news">
+                        <li class="loading">Haberler yükleniyor...</li>
+                    </ul>
+                </div>
+
+                <!-- Categories -->
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">Kategoriler</h3>
+                    <ul class="category-list">
+                        <li><a href="#" onclick="showCategory('gundem')">Gündem <span class="category-count" id="count-gundem">0</span></a></li>
+                        <li><a href="#" onclick="showCategory('spor')">Spor <span class="category-count" id="count-spor">0</span></a></li>
+                        <li><a href="#" onclick="showCategory('ekonomi')">Ekonomi <span class="category-count" id="count-ekonomi">0</span></a></li>
+                        <li><a href="#" onclick="showCategory('teknoloji')">Teknoloji <span class="category-count" id="count-teknoloji">0</span></a></li>
+                        <li><a href="#" onclick="showCategory('saglik')">Sağlık <span class="category-count" id="count-saglik">0</span></a></li>
+                        <li><a href="#" onclick="showCategory('magazin')">Magazin <span class="category-count" id="count-magazin">0</span></a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="newsletter">
+                    <h3>Bültenimize Abone Olun</h3>
+                    <p>En güncel haberleri e-posta adresinize gelsin</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="E-posta adresiniz" required>
+                        <button type="submit">GÖNDER</button>
+                    </form>
+                </div>
+
+                <!-- Reklam -->
+                <div class="sidebar-ad vertical">300x600 REKLAM</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>MOMENT HABER</h4>
+                    <div class="footer-about">
+                        <p>Moment Haber, anlık ve güncel haberleri okuyucularına ulaştırmayı hedefleyen bir haber platformudur.</p>
+                        <div class="footer-contact">
+                            <p><i class="fas fa-map-marker-alt"></i> İstanbul, Türkiye</p>
+                            <p><i class="fas fa-phone"></i> 
+                            <p><i class="fas fa-envelope"></i> 
+                        </div>
+                        <div class="social-icons">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>KATEGORİLER</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="showCategory('gundem')">Gündem</a></li>
+                        <li><a href="#" onclick="showCategory('spor')">Spor</a></li>
+                        <li><a href="#" onclick="showCategory('ekonomi')">Ekonomi</a></li>
+                        <li><a href="#" onclick="showCategory('teknoloji')">Teknoloji</a></li>
+                        <li><a href="#" onclick="showCategory('saglik')">Sağlık</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>ŞİRKET</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Hakkımızda</a></li>
+                        <li><a href="#">İletişim</a></li>
+                        <li><a href="#">Kariyer</a></li>
+                        <li><a href="#">Reklam</a></li>
+                        <li><a href="#">Gizlilik Politikası</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>HIZLI ERİŞİM</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Son Dakika</a></li>
+                        <li><a href="#">Gündem</a></li>
+                        <li><a href="#">Spor Haberleri</a></li>
+                        <li><a href="#">Ekonomi</a></li>
+                        <li><a href="#">Teknoloji</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Moment Haber - Tüm Hakları Saklıdır</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+
+
+
+
+
+
+// SAYFA YÜKLENDİĞİNDE
+document.addEventListener('DOMContentLoaded', function() {
+    // Yenileme butonunu ekle
+    yenilemeButonuEkle();
+    
+    // Önce API'den haber çek
+    gercekHaberleriGetir();
+    
+    // Otomatik yenilemeyi başlat (5 dakikada bir)
+    otomatikYenilemeBaslat();
+});
+
+// YENİLEME BUTONU EKLE
+function yenilemeButonuEkle() {
+    const featuredSection = document.querySelector('.featured-news');
+    const yenileBtn = `
+        <div style="text-align: center; margin: 15px 0;">
+            <button onclick="haberleriYenile()" class="btn" style="background: #28a745;">
+                <i class="fas fa-sync-alt"></i> Haberleri Yenile
+            </button>
+            <span id="son-yenileme" style="margin-left: 15px; color: #666; font-size: 14px;"></span>
+        </div>
+    `;
+    featuredSection.insertAdjacentHTML('afterbegin', yenileBtn);
+    sonYenilemeGuncelle();
+}
+
+// HABERLERİ YENİLE
+async function haberleriYenile() {
+    const btn = document.querySelector('.btn[onclick="haberleriYenile()"]');
+    const originalText = btn.innerHTML;
+    
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Yenileniyor...';
+    btn.disabled = true;
+    
+    try {
+        await gercekHaberleriGetir();
+        btn.innerHTML = '<i class="fas fa-check"></i> Yenilendi!';
+        sonYenilemeGuncelle();
+        
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }, 1500);
+        
+    } catch (error) {
+        btn.innerHTML = '<i class="fas fa-times"></i> Hata!';
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }, 1500);
+    }
+}
+
+// SON YENİLEME ZAMANINI GÜNCELLE
+function sonYenilemeGuncelle() {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('tr-TR');
+    document.getElementById('son-yenileme').textContent = `Son yenileme: ${timeString}`;
+}
+
+// OTOMATİK YENİLEME
+function otomatikYenilemeBaslat() {
+    setInterval(() => {
+        console.log('🔄 Otomatik yenileme: Haberler güncelleniyor...');
+        gercekHaberleriGetir();
+        sonYenilemeGuncelle();
+    }, 5 * 60 * 1000); // 5 dakika
+}
+
+
+
+        // API KEY'LER
+        const NEWS_API_KEY = '15c046c8a0824c0e8eb04b6384e37194';
+        const MEDIASTACK_API_KEY = 'de3c8ea9ffe7190c00460fcc87d4cfda';
+
+        // Tarih ve Saat Güncelleme
+        function updateDateTime() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('tr-TR', options);
+            document.getElementById('current-time').textContent = now.toLocaleTimeString('tr-TR');
+        }
+        
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+        
+        // Mobil Menü Toggle
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+
+        // Haber veritabanı
+        const haberler = {
+            all: [],
+            gundem: [],
+            spor: [],
+            ekonomi: [],
+            teknoloji: [],
+            saglik: [],
+            magazin: [],
+            video: [],
+            siyaset: [],
+            dunya: []
+        };
+
+        // GERÇEK API'DEN HABER ÇEKME - GÜNCELLENMİŞ VERSİYON
+        async function gercekHaberleriGetir() {
+            try {
+                console.log('API ile haberler çekiliyor...');
+                
+                // NewsAPI'den Türkçe haberler - DAHA FAZLA HABER
+                const newsApiUrl = `https://newsapi.org/v2/top-headlines?country=tr&pageSize=50&apiKey=${NEWS_API_KEY}`;
+                
+                const response = await fetch(newsApiUrl);
+                
+                if (!response.ok) {
+                    throw new Error('NewsAPI çalışmıyor');
+                }
+                
+                const data = await response.json();
+                
+                if(data.articles && data.articles.length > 0) {
+                    console.log(`${data.articles.length} gerçek haber bulundu`);
+                    
+                    const gercekHaberler = data.articles.map((haber, index) => {
+                        // Kategori belirleme - DAHA İYİ KATEGORİZASYON
+                        let category = 'gundem';
+                        const title = haber.title?.toLowerCase() || '';
+                        const description = haber.description?.toLowerCase() || '';
+                        
+                        if (title.includes('spor') || title.includes('futbol') || title.includes('basketbol') || title.includes('takım') || description.includes('spor')) {
+                            category = 'spor';
+                        } else if (title.includes('ekonomi') || title.includes('dolar') || title.includes('borsa') || title.includes('finans') || description.includes('ekonomi')) {
+                            category = 'ekonomi';
+                        } else if (title.includes('teknoloji') || title.includes('iphone') || title.includes('yapay zeka') || title.includes('android') || description.includes('teknoloji')) {
+                            category = 'teknoloji';
+                        } else if (title.includes('sağlık') || title.includes('hastane') || title.includes('doktor') || title.includes('tedavi') || description.includes('sağlık')) {
+                            category = 'saglik';
+                        } else if (title.includes('magazin') || title.includes('dizi') || title.includes('oyuncu') || title.includes('film') || title.includes('show') || description.includes('magazin')) {
+                            category = 'magazin';
+                        } else if (title.includes('siyaset') || title.includes('parti') || title.includes('seçim') || title.includes('meclis') || description.includes('siyaset')) {
+                            category = 'siyaset';
+                        } else if (title.includes('dünya') || title.includes('uluslararası') || title.includes('abd') || description.includes('dünya')) {
+                            category = 'dunya';
+                        }
+                        
+                        // GÜZEL GÖRSEL URL'LERİ - FIXED
+                        const haberResmi = haber.urlToImage || `https://picsum.photos/600/400?random=${index + 100}&t=${Date.now()}`;
+                        
+                        return {
+                            id: index + 100,
+                            title: haber.title || 'Haber başlığı yok',
+                            description: haber.description || 'Haber açıklaması mevcut değil',
+                            content: haber.content || haber.description || 'Haber içeriği mevcut değil',
+                            category: category,
+                            image: haberResmi,
+                            url: haber.url,
+                            source: haber.source?.name || 'Kaynak',
+                            time: haber.publishedAt ? 
+                                new Date(haber.publishedAt).toLocaleDateString('tr-TR') + ' ' + 
+                                new Date(haber.publishedAt).toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'}) 
+                                : 'Yakın zamanda',
+                            views: `${Math.floor(Math.random() * 50) + 5}K`,
+                            featured: index < 4 // İlk 4 haber öne çıkan
+                        };
+                    });
+                    
+                    // Haberleri güncelle
+                    haberleriGuncelle(gercekHaberler);
+                } else {
+                    throw new Error('API haber döndürmedi');
+                }
+                
+            } catch (error) {
+                console.log('API hatası:', error);
+                console.log('Örnek haberler gösteriliyor...');
+                ornekHaberleriGoster();
+            }
+        }
+
+        // Örnek haberler (API çalışmazsa) - DAHA FAZLA ÖRNEK
+        function ornekHaberleriGoster() {
+            const ornekHaberler = [
+                {
+                    id: 1, 
+                    title: "MomentHaber yayına başladı! Anlık haberler burada", 
+                    category: "gundem", 
+                    image: "https://picsum.photos/600/400?random=1", 
+                    views: "25.4K", 
+                    time: "1 saat önce", 
+                    featured: true,
+                    content: "MomentHaber, okuyucularına anlık ve güncel haberleri ulaştırmak için yayına başladı. Teknoloji, spor, ekonomi ve daha birçok kategoride haberlerimizle hizmetinizdeyiz."
+                },
+                {
+                    id: 2, 
+                    title: "Teknoloji devrimi: Yapay zeka hayatımızı değiştiriyor", 
+                    category: "teknoloji", 
+                    image: "https://picsum.photos/600/400?random=2", 
+                    views: "18.7K", 
+                    time: "3 saat önce", 
+                    featured: true,
+                    content: "Yapay zeka teknolojileri hızla gelişiyor ve hayatımızın her alanında etkisini gösteriyor. İş dünyasından sağlığa, eğitimden eğlenceye kadar birçok sektörde devrim yaratıyor."
+                },
+                {
+                    id: 3, 
+                    title: "Süper Lig'de bu hafta heyecan dorukta", 
+                    category: "spor", 
+                    image: "https://picsum.photos/600/400?random=3", 
+                    views: "15.2K", 
+                    time: "5 saat önce", 
+                    featured: true,
+                    content: "Süper Lig'de bu hafta oynanacak maçlar futbolseverleri heyecanlandırıyor. Büyük derbiler ve kritik maçlar ligde heyecanı doruklara taşıyor."
+                },
+                {
+                    id: 4, 
+                    title: "Dolar kuru ve ekonomi gündemi", 
+                    category: "ekonomi", 
+                    image: "https://picsum.photos/600/400?random=4", 
+                    views: "12.8K", 
+                    time: "7 saat önce", 
+                    featured: true,
+                    content: "Son dönemde dolar kuru ve ekonomi gündemi yatırımcıları yakından ilgilendiriyor. Uzmanlar piyasalardaki gelişmeleri değerlendiriyor."
+                },
+                {
+                    id: 5, 
+                    title: "Sağlık Bakanlığı'ndan önemli açıklama", 
+                    category: "saglik", 
+                    image: "https://picsum.photos/600/400?random=5", 
+                    views: "9.3K", 
+                    time: "9 saat önce", 
+                    featured: false,
+                    content: "Sağlık Bakanlığı, sağlık sistemindeki yenilikler ve gelişmeler hakkında önemli açıklamalarda bulundu."
+                },
+                {
+                    id: 6, 
+                    title: "Yerli diziler reyting rekoru kırıyor", 
+                    category: "magazin", 
+                    image: "https://picsum.photos/600/400?random=6", 
+                    views: "21.1K", 
+                    time: "11 saat önce", 
+                    featured: false,
+                    content: "Yerli diziler bu sezon reyting rekorları kırarak izleyicilerin beğenisini kazanıyor. Yapımlar hem yerli hem de uluslararası platformlarda büyük ilgi görüyor."
+                },
+                {
+                    id: 7, 
+                    title: "Borsa İstanbul'da rekor yükseliş", 
+                    category: "ekonomi", 
+                    image: "https://picsum.photos/600/400?random=7", 
+                    views: "14.5K", 
+                    time: "13 saat önce", 
+                    featured: false,
+                    content: "Borsa İstanbul'da hisse senetleri rekor seviyelere yükseldi. Yatırımcılar piyasadaki olumlu havadan memnun."
+                },
+                {
+                    id: 8, 
+                    title: "Yeni akıllı telefon tanıtıldı", 
+                    category: "teknoloji", 
+                    image: "https://picsum.photos/600/400?random=8", 
+                    views: "16.8K", 
+                    time: "15 saat önce", 
+                    featured: false,
+                    content: "Teknoloji devi yeni akıllı telefon modelini tanıttı. Cihazın özellikleri teknoloji meraklılarını heyecanlandırdı."
+                }
+            ];
+            
+            haberleriGuncelle(ornekHaberler);
+        }
+
+        function haberleriGuncelle(yeniHaberler) {
+            // Tüm haberleri temizle
+            Object.keys(haberler).forEach(key => {
+                haberler[key] = [];
+            });
+            
+            // Yeni haberleri ekle
+            yeniHaberler.forEach(haber => {
+                haberler.all.push(haber);
+                if (haberler[haber.category]) {
+                    haberler[haber.category].push(haber);
+                } else {
+                    haberler.gundem.push(haber);
+                }
+            });
+            
+            console.log(`Toplam ${haberler.all.length} haber yüklendi`);
+            
+            // Sayfayı güncelle
+            showCategory('all');
+        }
+
+        // Kategori göster
+        function showCategory(category) {
+            const haberListesi = category === 'all' ? haberler.all : haberler[category];
+            
+            if (haberListesi.length === 0) {
+                document.getElementById('featured-news').innerHTML = '<div class="loading">Bu kategoride henüz haber yok</div>';
+                document.getElementById('news-grid').innerHTML = '<div class="loading">Bu kategoride henüz haber yok</div>';
+                return;
+            }
+            
+            const featuredNews = haberListesi.filter(h => h.featured).slice(0, 4);
+            const normalNews = haberListesi.filter(h => !h.featured).slice(0, 12);
+            
+            updateFeaturedNews(featuredNews);
+            updateNewsGrid(normalNews);
+            updateTrendingNews(haberListesi.slice(0, 5));
+            updateBreakingNews(haberListesi[0]);
+            updateCategoryCounts();
+            
+            return false;
+        }
+
+        // Haberleri güncelleme fonksiyonları - GÜZEL GÖRSELLER
+        function updateFeaturedNews(haberler) {
+            const container = document.getElementById('featured-news');
+            
+            if (haberler.length === 0) {
+                container.innerHTML = '<div class="loading">Öne çıkan haber bulunamadı</div>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            haberler.forEach(haber => {
+                container.innerHTML += `
+                    <div class="featured-item" onclick="openNews(${haber.id})">
+                        <div class="featured-img">
+                            <div class="category-tag">${haber.category.toUpperCase()}</div>
+                            <img src="${haber.image}" alt="${haber.title}" onerror="this.src='https://picsum.photos/600/400?random=${haber.id}&t=${Date.now()}'">
+                        </div>
+                        <div class="featured-content">
+                            <h3>${haber.title}</h3>
+                            <div class="news-meta">
+                                <span><i class="far fa-clock"></i> ${haber.time}</span>
+                                <span><i class="far fa-eye"></i> ${haber.views}</span>
+                            </div>
+                            <p>${haber.description || haber.title}</p>
+                            <div class="read-more">Devamını Oku <i class="fas fa-arrow-right"></i></div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function updateNewsGrid(haberler) {
+            const container = document.getElementById('news-grid');
+            
+            if (haberler.length === 0) {
+                container.innerHTML = '<div class="loading">Henüz haber yok</div>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            haberler.forEach(haber => {
+                container.innerHTML += `
+                    <div class="news-item" onclick="openNews(${haber.id})">
+                        <div class="news-img">
+                            <img src="${haber.image}" alt="${haber.title}" onerror="this.src='https://picsum.photos/600/400?random=${haber.id}&t=${Date.now()}'">
+                        </div>
+                        <div class="news-content">
+                            <h3>${haber.title}</h3>
+                            <div class="news-meta">
+                                <span><i class="far fa-clock"></i> ${haber.time}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function updateTrendingNews(haberler) {
+            const container = document.getElementById('trending-news');
+            
+            if (haberler.length === 0) {
+                container.innerHTML = '<li class="loading">Trend haber yok</li>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            haberler.forEach((haber, index) => {
+                container.innerHTML += `
+                    <li onclick="openNews(${haber.id})">
+                        <div class="trending-number">${index + 1}</div>
+                        <div class="trending-content">
+                            <h4>${haber.title}</h4>
+                        </div>
+                    </li>
+                `;
+            });
+        }
+
+        function updateBreakingNews(haber) {
+            if (haber) {
+                document.getElementById('breaking-text').textContent = haber.title;
+            }
+        }
+
+        function updateCategoryCounts() {
+            Object.keys(haberler).forEach(category => {
+                if (category !== 'all') {
+                    const countElement = document.getElementById(`count-${category}`);
+                    if (countElement) {
+                        countElement.textContent = haberler[category].length;
+                    }
+                }
+            });
+        }
+
+        // HABER DETAY SAYFASI
+        function openNews(id) {
+            // Ana içeriği gizle
+            document.getElementById('ana-icerik').style.display = 'none';
+            
+            // Detay sayfasını göster
+            document.getElementById('haber-detay').style.display = 'block';
+            
+            // Haber bilgilerini bul
+            const haber = haberler.all.find(h => h.id === id);
+            
+            if (haber) {
+                document.getElementById('detay-baslik').textContent = haber.title;
+                document.getElementById('detay-kategori').textContent = haber.category.toUpperCase();
+                document.getElementById('detay-zaman').textContent = haber.time;
+                document.getElementById('detay-goruntulenme').textContent = haber.views + ' görüntülenme';
+                
+                document.getElementById('detay-resim').src = haber.image;
+                document.getElementById('detay-resim').alt = haber.title;
+                
+                const icerik = haber.content || haber.description || `${haber.title} ile ilgili detaylı haber içeriği. Haberin devamı için kaynak siteyi ziyaret edebilirsiniz.`;
+                document.getElementById('detay-icerik').innerHTML = `
+                    <p><strong>${haber.source}</strong></p>
+                    <p>${icerik}</p>
+                    ${haber.url ? `<p><a href="${haber.url}" target="_blank" class="btn">Kaynak Habere Git</a></p>` : ''}
+                `;
+            }
+        }
+
+        function anaSayfayaDon() {
+            document.getElementById('haber-detay').style.display = 'none';
+            document.getElementById('ana-icerik').style.display = 'block';
+        }
+
+        // SAYFA YÜKLENDİĞİNDE
+        document.addEventListener('DOMContentLoaded', function() {
+            // Önce API'den haber çek
+            gercekHaberleriGetir();
+        });
+
+// OTOMATİK HABER EKLEME SİSTEMİ
+function otomatikHaberEkle() {
+    console.log('🔄 Otomatik haber ekleniyor...');
+    
+    const yeniHaberler = [
+        {
+            id: Date.now(), // Benzersiz ID
+            title: "Son Dakika: " + getRastgeleBaslik(),
+            description: getRastgeleAciklama(),
+            content: getRastgeleIcerik(),
+            category: getRastgeleKategori(),
+            image: `https://picsum.photos/600/400?random=${Date.now()}`,
+            source: "MomentHaber",
+            time: "Şimdi",
+            views: `${Math.floor(Math.random() * 20) + 5}K`,
+            featured: Math.random() > 0.7 // %30 ihtimal öne çıkan
+        }
+    ];
+    
+    // Mevcut haberlere ekle
+    yeniHaberler.forEach(haber => {
+        haberler.all.push(haber);
+        if (haberler[haber.category]) {
+            haberler[haber.category].push(haber);
+        }
+    });
+    
+    // Sayfayı güncelle
+    showCategory('all');
+    console.log('✅ Yeni haber eklendi:', yeniHaberler[0].title);
+}
+
+// RASTGELE BAŞLIK ÜRET
+function getRastgeleBaslik() {
+    const basliklar = [
+        "Ekonomide flaş gelişme",
+        "Spor dünyasında sürpriz",
+        "Teknolojik yenilik piyasada",
+        "Sağlık sektöründe devrim",
+        "Magazin dünyasından haber",
+        "Siyaset gündeminde yeni gelişme",
+        "Dünya genelinde önemli olay",
+        "İstanbul'da trafik haberleri",
+        "Hava durumu uyarısı",
+        "Kültür sanat etkinliği"
+    ];
+    return basliklar[Math.floor(Math.random() * basliklar.length)];
+}
+
+// RASTGELE AÇIKLAMA
+function getRastgeleAciklama() {
+    const aciklamalar = [
+        "Son dakika gelişmeleri ve detaylar haberimizde...",
+        "Olayla ilgili tüm detaylar burada",
+        "Uzmanlar konu hakkında açıklama yaptı",
+        "Gelişmeler anlık olarak takip ediliyor",
+        "Konuyla ilgili resmi açıklama bekleniyor"
+    ];
+    return aciklamalar[Math.floor(Math.random() * aciklamalar.length)];
+}
+
+// RASTGELE İÇERİK
+function getRastgeleIcerik() {
+    return "Bu haber MomentHaber otomatik sistemleri tarafından oluşturulmuştur. Güncel gelişmeleri takip etmeye devam edin.";
+}
+
+// RASTGELE KATEGORİ
+function getRastgeleKategori() {
+    const kategoriler = ['gundem', 'spor', 'ekonomi', 'teknoloji', 'saglik', 'magazin'];
+    return kategoriler[Math.floor(Math.random() * kategoriler.length)];
+}
+
+// 10 DAKİKADA BİR YENİ HABER EKLE
+setInterval(() => {
+    if (haberler.all.length < 25) { // Eğer az haber varsa
+        otomatikHaberEkle();
+    }
+}, 10 * 60 * 1000); // 10 dakika
+
+// SAYFA AÇILINCA DA BİR HABER EKLE
+setTimeout(() => {
+    if (haberler.all.length < 10) {
+        otomatikHaberEkle();
+    }
+}, 5000); // 5 saniye sonra
+
+// 5 DAKİKADA BİR (DAHA SIK)
+setInterval(() => {
+    if (haberler.all.length < 30) {
+        otomatikHaberEkle();
+    }
+}, 5 * 60 * 1000); // 5 dakika
+
+// HER YENİLEMEDE BİR HABER EKLE
+async function haberleriYenile() {
+    // ... mevcut kodlar ...
+    
+    // Yenileme bitince bir haber daha ekle
+    setTimeout(() => {
+        otomatikHaberEkle();
+    }, 1000);
+}otomatikHaberEkle();
+
+    </script>
+</body>
+</html>
